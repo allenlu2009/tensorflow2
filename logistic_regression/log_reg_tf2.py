@@ -1,39 +1,39 @@
-### TF2.0 Logistic Regressionx_train_ = tf.convert_to_tensor(train_inputs_of_numpy)
-y_train_ = tf.convert_to_tensor(train_labels_of_numpy)
+import tensorflow as tf
+import numpy as np
+import matplotlib.pyplot as plt
 
-# Logistic regression model
-model = tf.keras.layers.Dense(output_size, activation="sigmoid")
+# 1. Generate data
+points = 1000
+X = np.linspace(-10, 10, points)
+np.random.shuffle(X)
+Y = np.heaviside( 1.0*X + np.random.normal(0, 3, (points, )), 0)
+x_train, y_train = X[int(points*0.1):], Y[int(points*0.1):]
+x_test, y_test = X[:int(points*0.1)], Y[:int(points*0.1)]
+#print(x_train, y_train)
+#print(x_test, y_test)
 
-# loss function
-def loss_fn(model, x, y):
-    predict_y = model(x)
+# 2. Build model
+model = tf.keras.models.Sequential(
+    [tf.keras.layers.Dense(units=1, input_shape=[1], activation='sigmoid')])
 
-    # return shape is (x.shape[0], ) ; each element is each data's loss.
-    return tf.keras.losses.binary_crossentropy(y, predict_y)
+# 3. Train model with data
+model.compile(optimizer='sgd', loss='binary_crossentropy')
+model.fit(x_train, y_train, epochs=100)
 
-def accuracy_fn(model, x, y):
-    predict_y = model(x)
+# 4. Test model with data
+model.evaluate(x_test, y_test)
 
-    # return shape is (x.shape[0], ) ; each element is 1 or 0.(If y[i] == y_pre[i], the i th element is 1). 
-    return tf.keras.metrics.binary_accuracy(y, predict_y)
+# 5. Predict/Infer data
+x_test_sort = np.sort(x_test)
+y_pred = model.predict(x_test_sort)
+#print(y_pred)
 
-# optimizer
-optimizer = tf.keras.optimizers.SGD(learning_rate=learning_rate)
-
-
-for epoch in range(num_epochs):
-    with tf.GradientTape() as tape:
-        loss = loss_fn(model, x_train_, y_train_)
-    grads = tape.gradient(loss, model.variables)
-    
-    accuracy = accuracy_fn(model=model, x=x_train_, y=y_train_)
-    
-    if (epoch+1) % 5 == 0:
-        print(
-            "loss: {:0.3f},  acc: {}".format(
-                tf.reduce_sum(loss).numpy(),   # using TF function or numpy method
-                accuracy.numpy().mean()         # both of ok.
-            )  
-        ) 
-    # update prameters using grads
-    optimizer.apply_gradients(zip(grads, model.variables))
+plt.scatter(x_test, y_test, c='r')
+#plt.scatter(x_test_sort, y_pred, c='g')
+plt.plot(x_test_sort, y_pred)
+plt.grid()
+plt.title('Logistic Regression')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.axis([-10, 10, -0.1, 1.1])
+plt.show()

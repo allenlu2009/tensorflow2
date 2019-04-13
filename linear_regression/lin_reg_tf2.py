@@ -7,8 +7,10 @@ points = 500
 X = np.linspace(-10, 10, points)
 np.random.shuffle(X)
 Y = 2.0*X + 3.0 + np.random.normal(0, 1, (points, ))
-x_train, y_train = X[int(points*0.9):], Y[int(points*0.9):]
+x_train, y_train = X[int(points*0.1):], Y[int(points*0.1):]
 x_test, y_test = X[:int(points*0.1)], Y[:int(points*0.1)]
+#print(x_train, y_train)
+#print(x_test, y_test)
 
 # 2. Build model
 model = tf.keras.models.Sequential(
