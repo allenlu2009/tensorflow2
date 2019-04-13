@@ -17,7 +17,7 @@ model = tf.keras.models.Sequential(
     [tf.keras.layers.Dense(units=1, input_shape=[1], activation='sigmoid')])
 
 # 3. Train model with data
-model.compile(optimizer='sgd', loss='binary_crossentropy')
+model.compile(optimizer='sgd', loss='binary_crossentropy', metrics=['accuracy'])
 model.fit(x_train, y_train, epochs=100)
 
 # 4. Test model with data
