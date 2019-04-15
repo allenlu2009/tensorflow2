@@ -32,3 +32,9 @@ new_model = tf.keras.models.load_model('mnist_model.h5')
 new_pred_labels = new_model.predict(test_images)
 np.testing.assert_allclose(pred_labels, new_pred_labels, atol=1e-6)
 
+# Export the model to a SavedModel for multiple platforms, only for TF2.x
+tf.keras.experimental.export_saved_model(model, 'mnist_model.h6')
+new_model = tf.keras.experimental.load_from_saved_model('mnist_model.h6')
+new_pred_labels = new_model.predict(test_images)
+np.testing.assert_allclose(pred_labels, new_pred_labels, atol=1e-6)
+
