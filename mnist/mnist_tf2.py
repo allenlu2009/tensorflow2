@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+import pandas as pd
 
 mnist = tf.keras.datasets.mnist
 
@@ -23,8 +24,14 @@ model.fit(train_images, train_labels, epochs=3)
 model.evaluate(test_images, test_labels)        # evaluate = test
 
 # 5. infer/predict use trained model
-pred_labels = model.predict(test_images)  # predict is for 1 test
+pred_labels = model.predict(test_images)
+pred_labels_Y = np.argmax(pred_labels, axis=1)
 #print(pred_labels)
+
+#print(test_labels)
+#print(pred_labels_Y)
+# confusion matrix
+print(pd.crosstab(test_labels, pred_labels_Y, rownames=['label'], colnames=['predict']))
 
 # 6. save/restore model and check the accuracy 
 model.save('mnist_model.h5')
@@ -33,8 +40,9 @@ new_pred_labels = new_model.predict(test_images)
 np.testing.assert_allclose(pred_labels, new_pred_labels, atol=1e-6)
 
 # Export the model to a SavedModel for multiple platforms, only for TF2.x
-tf.keras.experimental.export_saved_model(model, 'mnist_model.h6')
-new_model = tf.keras.experimental.load_from_saved_model('mnist_model.h6')
-new_pred_labels = new_model.predict(test_images)
-np.testing.assert_allclose(pred_labels, new_pred_labels, atol=1e-6)
+#tf.keras.experimental.export_saved_model(model, 'mnist_model.h6')
+#new_model = tf.keras.experimental.load_from_saved_model('mnist_model.h6')
+#new_pred_labels = new_model.predict(test_images)
+#np.testing.assert_allclose(pred_labels, new_pred_labels, atol=1e-6)
+
 
