@@ -1,19 +1,37 @@
-import tensorflow as tf
 import numpy as np
 import pandas as pd
 
-mnist = tf.keras.datasets.mnist
+import tensorflow as tf
+from tensorflow.keras.layers import Flatten, Dense
+from tensorflow.keras import Model
 
+# PyTorch like network model in Keras
+class MyModel(Model):
+    def __init__(self):
+        super(MyModel, self).__init__()
+        num_classes = 10
+        self.flatten = Flatten(input_shape=[28,28])
+        self.fc1 = Dense(units=128, activation='relu')
+        self.fc2 = Dense(units=num_classes, activation='softmax')])
+
+    def call(self, x):
+        x = self.flatten(x)
+        x = self.fc1(x)
+        return self.fc2(x)
+
+    
 # 1. load data
+mnist = tf.keras.datasets.mnist
 (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
 train_images, test_images = train_images/255.0, test_images/255.0
 
 # 2. build model
-num_classes = 10
-model = tf.keras.models.Sequential([
-    tf.keras.layers.Flatten(input_shape=[28,28]),
-    tf.keras.layers.Dense(units=128, activation='relu'),
-    tf.keras.layers.Dense(units=num_classes, activation='softmax')])
+#num_classes = 10
+#model = tf.keras.models.Sequential([
+#    tf.keras.layers.Flatten(input_shape=[28,28]),
+#    tf.keras.layers.Dense(units=128, activation='relu'),
+#    tf.keras.layers.Dense(units=num_classes, activation='softmax')])
+model = MyModel()
 model.summary()
 
 # 3. train model with data
