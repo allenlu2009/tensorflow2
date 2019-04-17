@@ -2,19 +2,25 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
+def lin_reg_load_data():
+    points = 500
+    X = np.linspace(-10, 10, points)
+    np.random.shuffle(X)
+    Y = 2.0*X + 3.0 + np.random.normal(0, 1, (points, ))
+    x_train, y_train = X[int(points*0.1):], Y[int(points*0.1):]
+    x_test, y_test = X[:int(points*0.1)], Y[:int(points*0.1)]
+    return (x_train, y_train), (x_test, y_test)
+
+
 # 1. Generate data
-points = 500
-X = np.linspace(-10, 10, points)
-np.random.shuffle(X)
-Y = 2.0*X + 3.0 + np.random.normal(0, 1, (points, ))
-x_train, y_train = X[int(points*0.1):], Y[int(points*0.1):]
-x_test, y_test = X[:int(points*0.1)], Y[:int(points*0.1)]
+(x_train, y_train), (x_test, y_test) = lin_reg_load_data()
 #print(x_train, y_train)
 #print(x_test, y_test)
 
 # 2. Build model
 model = tf.keras.models.Sequential(
     [tf.keras.layers.Dense(units=1, input_shape=[1])])
+model.summary()
 
 # 3. Train model with data
 model.compile(optimizer='sgd', loss='mse')
