@@ -2,19 +2,25 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
+def log_reg_load_data():
+    points = 1000
+    X = np.linspace(-10, 10, points)
+    np.random.shuffle(X)
+    Y = np.heaviside( 1.0*X + np.random.normal(0, 3, (points, )), 0)    
+    x_train, y_train = X[int(points*0.1):], Y[int(points*0.1):]
+    x_test, y_test = X[:int(points*0.1)], Y[:int(points*0.1)]
+    return (x_train, y_train), (x_test, y_test)
+
+
 # 1. Generate data
-points = 1000
-X = np.linspace(-10, 10, points)
-np.random.shuffle(X)
-Y = np.heaviside( 1.0*X + np.random.normal(0, 3, (points, )), 0)
-x_train, y_train = X[int(points*0.1):], Y[int(points*0.1):]
-x_test, y_test = X[:int(points*0.1)], Y[:int(points*0.1)]
+(x_train, y_train), (x_test, y_test) = log_reg_load_data()
 #print(x_train, y_train)
 #print(x_test, y_test)
 
 # 2. Build model
 model = tf.keras.models.Sequential(
     [tf.keras.layers.Dense(units=1, input_shape=[1], activation='sigmoid')])
+model.summary()
 
 # 3. Train model with data
 model.compile(optimizer='sgd', loss='binary_crossentropy', metrics=['accuracy'])
