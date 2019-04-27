@@ -1,3 +1,4 @@
+from keras.datasets import cifar10
 import numpy as np
 import pandas as pd
 
@@ -32,18 +33,18 @@ def MyModel2():
 def MyModel3():
     num_classes = 10
     model = tf.keras.models.Sequential([
-        tf.keras.layers.Flatten(input_shape=[28,28]),
+        tf.keras.layers.Flatten(input_shape=[32,32,3]),
         tf.keras.layers.Dense(units=128, activation='relu'),
         tf.keras.layers.Dense(units=num_classes, activation='softmax')])
     return model
-    
+
+
 # 1. load data
-mnist = tf.keras.datasets.mnist
-(train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+(train_images, train_labels), (test_images, test_labels) = cifar10.load_data()
 train_images, test_images = train_images/255.0, test_images/255.0
 
 # 2. build model (1) use sequential model; (2) use subclass model
-num_classes = 10
+num_classes = 100
 #model = tf.keras.models.Sequential([
 #    tf.keras.layers.Flatten(input_shape=[28,28]),
 #    tf.keras.layers.Dense(units=128, activation='relu'),
@@ -54,7 +55,7 @@ model.summary()
 
 # 3. train model with data
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-model.fit(train_images, train_labels, epochs=3)
+model.fit(train_images, train_labels, epochs=10)
 
 # 4. validate model with data
 model.evaluate(test_images, test_labels)        # evaluate = test
@@ -67,13 +68,13 @@ pred_labels_Y = np.argmax(pred_labels, axis=1)
 #print(test_labels)
 #print(pred_labels_Y)
 # confusion matrix
-print(pd.crosstab(test_labels, pred_labels_Y, rownames=['label'], colnames=['predict']))
+#print(pd.crosstab(test_labels, pred_labels_Y, rownames=['label'], colnames=['predict']))
 
 # 6. save/restore model and check the accuracy, only work in sequntial or functional models, not subclass model 
-model.save('mnist_model.h5')
-new_model = tf.keras.models.load_model('mnist_model.h5')
-new_pred_labels = new_model.predict(test_images)
-np.testing.assert_allclose(pred_labels, new_pred_labels, atol=1e-6)
+#model.save('mnist_model.h5')
+#new_model = tf.keras.models.load_model('mnist_model.h5')
+#new_pred_labels = new_model.predict(test_images)
+#np.testing.assert_allclose(pred_labels, new_pred_labels, atol=1e-6)
 
 # Export the model to a SavedModel for multiple platforms, only for TF2.x
 #tf.keras.experimental.export_saved_model(model, 'mnist_model.h6')
