@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import pysnooper
 import argparse
 import h5py
 import os
@@ -110,7 +111,8 @@ class PossibleParameters():
     kernel_regularizer = [0., 5e-4, 1e-3]
     augmentation_strength = [0., 1.3]
 
-    
+
+@pysnooper.snoop('./pysnooper.log')
 def train(parameters):
 
     # for tiny imagenet dataset
@@ -156,7 +158,7 @@ def train(parameters):
     #use_multiprocessing=False
     
     
-    
+@pysnooper.snoop('./main.log')
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--name', type=str, required=True,
