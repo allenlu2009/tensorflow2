@@ -4,6 +4,7 @@
 *.log
 .DS_Store
 .ipynb_checkpoints
+logs/
 node_modules
 /.bazelrc
 /.tf_configure.bazelrc

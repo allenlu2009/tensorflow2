@@ -10,6 +10,7 @@ import random
 import keras
 from keras import optimizers
 from keras.datasets import cifar10
+from keras.callbacks import TensorBoard
 
 import tensorflow as tf
 
@@ -112,7 +113,7 @@ class PossibleParameters():
     augmentation_strength = [0., 1.3]
 
 
-@pysnooper.snoop('./pysnooper.log')
+#@pysnooper.snoop('./pysnooper.log')
 def train(parameters):
 
     # for tiny imagenet dataset
@@ -146,6 +147,18 @@ def train(parameters):
 
     sgd = optimizers.SGD(lr=parameters.initial_learning_rate, momentum=0.9)
     model.compile(loss='sparse_categorical_crossentropy', optimizer=sgd, metrics=metrics)
+
+    tbCallBack = TensorBoard(log_dir='./logs',
+                             histogram_freq=0,
+                             #batch_size=32,
+                             write_graph=True,
+                             write_grads=True,
+                             write_images=True,
+                             embeddings_freq=0,
+                             embeddings_layer_names=None,
+                             embeddings_metadata=None)
+
+
     
     #model.fit(train_generator, epochs=60)
     model.fit_generator(
@@ -153,12 +166,13 @@ def train(parameters):
         epochs=parameters.nb_epochs,
         steps_per_epoch=train_generator.n // parameters.batch_size,
         validation_data=val_generator,
-        validation_steps=val_generator.n // parameters.batch_size)
+        validation_steps=val_generator.n // parameters.batch_size,
+        callbacks=[tbCallBack])
     #callbacks=callbacks, shuffle='batch', workers=8,
     #use_multiprocessing=False
     
     
-@pysnooper.snoop('./main.log')
+#@pysnooper.snoop('./main.log')
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--name', type=str, required=True,
