@@ -1,6 +1,8 @@
 """Definition of the the CNN architecture using the keras API."""
 
-import keras
+import tensorflow as tf
+from tensorflow import keras
+#import keras
 from keras import regularizers
 from keras.layers import GlobalAveragePooling2D, Input, Lambda, AveragePooling2D, Concatenate, GaussianNoise, Activation
 from keras.layers.convolutional import Conv2D, MaxPooling2D
@@ -9,7 +11,6 @@ from keras.layers.normalization import BatchNormalization
 from keras.metrics import top_k_categorical_accuracy as top5
 from keras.models import Model
 from keras.optimizers import SGD
-import tensorflow as tf
 
 import argparse
 

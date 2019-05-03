@@ -7,12 +7,12 @@ import os
 import numpy as np
 import random
 
-import keras
+import tensorflow as tf
+from tensorflow import keras
+#import keras
 from keras import optimizers
 from keras.datasets import cifar10
 from keras.callbacks import TensorBoard
-
-import tensorflow as tf
 
 #from tf.keras.datasets import cifar10
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img

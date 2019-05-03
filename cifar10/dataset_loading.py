@@ -10,12 +10,13 @@ import h5py
 
 import numpy as np
 
-import keras
+import tensorflow as tf
+from tensorflow import keras
+#import keras
 from keras import optimizers
 from keras.datasets import cifar10
 from keras.preprocessing.image import ImageDataGenerator
 
-import tensorflow as tf
 
 mean = np.array([[[122.4626756, 114.25840613, 101.37467571]]],
                 dtype=np.float32)
